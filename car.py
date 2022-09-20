@@ -23,3 +23,7 @@ class Car:
 
         # Update speed value according to the factor
         self.speed += self.speed_factor
+
+        if self.speed <= 0:
+            self.speed = 10
+            self.speed_factor = 0
