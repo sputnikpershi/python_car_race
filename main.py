@@ -13,6 +13,7 @@ def main():
     # Prepare the race
     CarRace.load_cars()
     CarRace.start_race()
+    CarRace.print_results()
 
 
 if __name__ == '__main__':

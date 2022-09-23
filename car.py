@@ -24,6 +24,7 @@ class Car:
         # Update speed value according to the factor
         self.speed += self.speed_factor
 
+        # Special equation doesn't let the car stop before the finish
         if self.speed <= 0:
             self.speed = 10
             self.speed_factor = 0

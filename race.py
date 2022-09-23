@@ -18,6 +18,7 @@ class CarRace:
     number_of_cars: int = len(cars)
     is_race_active: bool = False
     number_of_seconds: int = 0
+    finished_cars: List[Car] = []
 
     @staticmethod
     def load_cars():
@@ -50,15 +51,23 @@ class CarRace:
 
         while CarRace.is_race_active:
             CarRace.number_of_seconds += 1
-            print(f"Car status: Time {CarRace.number_of_seconds} seconds")
-
             # Drive each, check if it has reached the goal
             for car in CarRace.cars:
+
                 car.drive()
-                print(f"- car: {car.name} has distance: {car.distance}")
+                print(f"- car: {car.name} has distance: {car.distance} --- {car.driving_time}")
 
                 if car.distance >= config.max_distance:
-                    print(f"- car: {car.name} has won the race!")
+                    print(f"- car: {car.name} has crossed the line!")
+                    CarRace.finished_cars.append(car)
+                    CarRace.cars.remove(car)
                     break
+        CarRace.is_race_active = False
 
-            CarRace.is_race_active = True
+    # @staticmethod
+    # def print_results():
+    #     print("------- RESULT OF THE RACE -------")
+    #     index = 0
+    #     for i in CarRace.finished_cars:
+    #         index += 1
+    #         print(f"{index}. {i.name}")
