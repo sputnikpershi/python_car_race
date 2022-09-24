@@ -15,10 +15,10 @@ class CarRace:
     """Static class for the events of the car race"""
 
     cars: List[Car] = []
+    finished_cars: List[Car] = []
     number_of_cars: int = len(cars)
     is_race_active: bool = False
     number_of_seconds: int = 0
-    finished_cars: List[Car] = []
 
     @staticmethod
     def load_cars():
@@ -45,29 +45,48 @@ class CarRace:
             CarRace.cars.append(sport_car)
 
         CarRace.is_race_active = True
+        CarRace.number_of_cars = len(CarRace.cars)
 
     @staticmethod
     def start_race():
+        """Allow each car to drive until all of them cross the finish line"""
+
+        cars_race_state: List[bool] = [True for _ in range(CarRace.number_of_cars)]
 
         while CarRace.is_race_active:
             CarRace.number_of_seconds += 1
+            print(f"\n===== Race duration: {CarRace.number_of_seconds} secs =====")
+
             # Drive each, check if it has reached the goal
-            for car in CarRace.cars:
+            for car_index in range(CarRace.number_of_cars):
+                current_car: Car = CarRace.cars[car_index]
+                current_car.drive()
+                print(f"- car: {current_car.name} has distance: {current_car.distance}")
 
-                car.drive()
-                print(f"- car: {car.name} has distance: {car.distance} --- {car.driving_time}")
+                if not current_car.is_running:
+                    continue
 
-                if car.distance >= config.max_distance:
-                    print(f"- car: {car.name} has crossed the line!")
-                    CarRace.finished_cars.append(car)
-                    CarRace.cars.remove(car)
-                    break
-        CarRace.is_race_active = False
+                if current_car.distance >= config.max_distance:
+                    print(f"- car: {current_car.name} has crossed the line!")
+                    current_car.is_running = False
+                    cars_race_state[car_index] = False
+                    CarRace.finished_cars.append(current_car)
 
-    # @staticmethod
-    # def print_results():
-    #     print("------- RESULT OF THE RACE -------")
-    #     index = 0
-    #     for i in CarRace.finished_cars:
-    #         index += 1
-    #         print(f"{index}. {i.name}")
+            CarRace.is_race_active = any(cars_race_state)
+
+    @staticmethod
+    def print_results():
+        """Print a formatted summary of the race results"""
+
+        # Print header results
+        print("\n\n====== RACE RESULTS! ======")
+        print(f"Race duration: {CarRace.number_of_seconds} seconds")
+        print(f"Race distance: {config.max_distance} mts")
+        print(f"Car ranking ({CarRace.number_of_cars} cars): ")
+
+        # Arrange cars by arrival
+        rank_index: int = 0
+
+        for car in CarRace.finished_cars:
+            rank_index += 1
+            print(f"- #{rank_index}: {car.name}, race time: {car.driving_time}")
