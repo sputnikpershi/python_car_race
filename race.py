@@ -28,8 +28,9 @@ class CarRace:
         for index in range(config.number_of_consumer_cars):
             consumer_car: Car = Car()
             decay_value: int = randint(config.speed_decay_range[0], config.speed_decay_range[1])
-            speed: int = randint(config.speed_range_consumer_car[0], config.speed_range_consumer_car[0])
+            speed: int = randint(config.speed_range_consumer_car[0], config.speed_range_consumer_car[1])
             consumer_car.speed = speed
+            consumer_car.original_speed = speed
             consumer_car.speed_factor = -decay_value
             consumer_car.name = f"consumer_car{index + 1}"
             CarRace.cars.append(consumer_car)
@@ -37,10 +38,11 @@ class CarRace:
         # Create the "Sport" (fast) cars
         for index in range(config.number_of_sport_cars):
             sport_car: Car = Car()
-            decay_value = randint(config.speed_increase_range[0], config.speed_increase_range[1])
-            speed: int = randint(config.speed_range_sport_car[0], config.speed_range_sport_car[0])
+            increase_value = randint(config.speed_increase_range[0], config.speed_increase_range[1])
+            speed: int = randint(config.speed_range_sport_car[0], config.speed_range_sport_car[1])
             sport_car.speed = speed
-            sport_car.speed_factor = decay_value
+            sport_car.original_speed = speed
+            sport_car.speed_factor = increase_value
             sport_car.name = f"sport_car{index + 1}"
             CarRace.cars.append(sport_car)
 
@@ -60,11 +62,10 @@ class CarRace:
             # Drive each, check if it has reached the goal
             for car_index in range(CarRace.number_of_cars):
                 current_car: Car = CarRace.cars[car_index]
-                current_car.drive()
-                print(f"- car: {current_car.name} has distance: {current_car.distance}")
-
                 if not current_car.is_running:
                     continue
+                current_car.drive()
+                print(f"- car: {current_car.name} has distance: {current_car.distance}")
 
                 if current_car.distance >= config.max_distance:
                     print(f"- car: {current_car.name} has crossed the line!")

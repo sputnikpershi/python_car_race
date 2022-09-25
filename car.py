@@ -9,11 +9,12 @@ class Car:
 
     def __init__(self):
         self.name: str = "Generic Car"
-        self.speed: float = 0
-        self.distance: float = 0
+        self.speed: int = 0
+        self.distance: int = 0
         self.driving_time: int = 0
-        self.speed_factor: float = 0
+        self.speed_factor: int = 0
         self.is_running: bool = True
+        self.original_speed: int = 0
 
     def drive(self):
         """Simulates driving with a speed determined by the speed factor (to increase or decrease)"""
@@ -30,5 +31,5 @@ class Car:
 
         # If the speed reaches 0, keep a low constant value with no decrease
         if self.speed <= 0:
-            self.speed = 10
+            self.speed = self.original_speed
             self.speed_factor = 0
