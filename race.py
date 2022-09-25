@@ -76,7 +76,7 @@ class CarRace:
 
     @staticmethod
     def print_results():
-        """Print a formatted summary of the race results"""
+        """Print a formatted summary of the race results """
 
         # Print header results
         print("\n\n====== RACE RESULTS! ======")
